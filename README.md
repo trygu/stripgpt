@@ -148,6 +148,17 @@ Or via tox:
 tox
 ```
 
+## Publishing (manual)
+Requires `build` and `twine` (install via `pip install build twine`).
+
+```bash
+python -m build
+twine check dist/*
+twine upload dist/*  # set PYPI_TOKEN or enter credentials
+```
+
+Or use the provided GitHub Actions workflow (add `PYPI_API_TOKEN` secret).
+
 Run CLI locally without install (editable already works):
 
 ```bash

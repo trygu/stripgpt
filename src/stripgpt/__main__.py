@@ -3,6 +3,7 @@ import sys
 import argparse
 from pathlib import Path
 from .core import clean_text, detect_artifacts
+from . import __version__
 
 def process_path(p: Path, *, inplace: bool, backup_suffix: str, enc: str,
 				 kill_bare: bool, normalize: bool) -> None:
@@ -29,9 +30,13 @@ def main(argv=None):
 					help='Keep whitespace as-is (no trimming/compacting).')
 	ap.add_argument('--detect', action='store_true',
 					help='Only detect and report artifact counts (JSON) per file/stdin; do not modify output.')
+	ap.add_argument('-V', '--version', action='store_true', help='Print version and exit.')
 	args = ap.parse_args(argv)
 
 	try:
+		if args.version:
+			sys.stdout.write(f"stripgpt {__version__}\n")
+			return 0
 		if args.paths:
 			for s in args.paths:
 				p = Path(s)

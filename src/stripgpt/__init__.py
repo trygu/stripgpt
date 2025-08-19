@@ -7,5 +7,7 @@ Provides convenient imports:
 
 from .core import clean_text, detect_artifacts, START, END  # noqa: F401
 
-__all__ = ["clean_text", "detect_artifacts", "START", "END"]
+__version__ = "0.2.0"
+
+__all__ = ["clean_text", "detect_artifacts", "START", "END", "__version__"]
 
