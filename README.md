@@ -81,6 +81,19 @@ Specify encoding (default utf-8):
 stripgpt --encoding latin-1 legacy.txt > legacy-clean.txt
 ```
 
+Detection only (no modification) – JSON report per input:
+
+```bash
+stripgpt --detect file1.txt file2.txt
+# or
+cat text.md | stripgpt --detect
+```
+Example output:
+
+```json
+{"pua_spans":1,"bare_tokens":2,"zero_width":3,"file":"file1.txt"}
+```
+
 Help:
 
 ```bash

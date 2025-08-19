@@ -5,7 +5,7 @@ SRC_DIR = Path(__file__).resolve().parents[1] / 'src'
 if str(SRC_DIR) not in sys.path:
 	sys.path.insert(0, str(SRC_DIR))
 
-from stripgpt import clean_text, START, END  # type: ignore
+from stripgpt import clean_text, detect_artifacts, START, END  # type: ignore
 
 SAMPLE = f"Before {START}SECRET{END} After"
 
@@ -93,3 +93,20 @@ def test_private_use_chars_removed():
 	txt = f'A{pua_chars}B'
 	out = clean_text(txt, kill_bare=False, normalize=False)
 	assert out == 'AB'
+
+
+def test_detect_artifacts_basic():
+	txt = f'X{START}secret{END}Y turn2search5 L10-L11 \u200B'
+	rep = detect_artifacts(txt)
+	assert rep.get('pua_spans') == 1
+	assert rep.get('bare_tokens') == 1
+	assert rep.get('line_ranges') == 1
+	assert rep.get('zero_width') == 1
+
+def test_cli_detect(tmp_path: Path):
+	sample = tmp_path / 'sample.txt'
+	sample.write_text(f'A{START}B{END} turn2search5', encoding='utf-8')
+	code, out, _ = run_cli(['--detect', str(sample)])
+	assert code == 0
+	assert 'pua_spans' in out
+	assert 'bare_tokens' in out

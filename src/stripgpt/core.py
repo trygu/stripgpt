@@ -24,5 +24,41 @@ def clean_text(txt: str, *, kill_bare: bool, normalize: bool) -> str:
 		t = t.strip()
 	return t
 
-__all__ = ['clean_text', 'START', 'END']
+def detect_artifacts(txt: str) -> dict:
+	"""Detect ChatGPT / LLM export artifacts without modifying text.
+
+	Returns a dict with counts for each artifact category. A category absent (count 0)
+	indicates that artifact type was not detected.
+	Categories:
+	  - pua_spans: number of start/end marker spans (START..END) found
+	  - pua_chars: count of standalone private-use characters (category 'Co') remaining after removing spans virtually
+	  - zero_width: count of zero-width / bidi control characters
+	  - bare_tokens: count of tokens like turn2search5
+	  - line_ranges: count of line range tokens like L10-L20
+	"""
+	report: dict[str, int] = {}
+	# Count spans
+	spans = list(PUA_SPAN.finditer(txt))
+	if spans:
+		report['pua_spans'] = len(spans)
+	# Remove spans virtually to avoid double counting their interior PUA chars
+	tmp = PUA_SPAN.sub('', txt)
+	# Count private-use characters
+	pua_chars = [ch for ch in tmp if unicodedata.category(ch) == 'Co']
+	if pua_chars:
+		report['pua_chars'] = len(pua_chars)
+	# Zero-width / bidi control
+	zw = ZW_DIR.findall(tmp)
+	if zw:
+		report['zero_width'] = len(zw)
+	# Bare tokens
+	bt = BARE_TOKEN.findall(tmp)
+	if bt:
+		report['bare_tokens'] = len(bt)
+	lr = LINE_RANGE.findall(tmp)
+	if lr:
+		report['line_ranges'] = len(lr)
+	return report
+
+__all__ = ['clean_text', 'detect_artifacts', 'START', 'END']
 
