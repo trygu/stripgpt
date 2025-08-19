@@ -9,14 +9,14 @@ description = "CLI tool to strip ChatGPT-specific markers from text"
 authors = [ { name = "Trygve Falch" } ]
 readme = "README.md"
 requires-python = ">=3.12"
-license = { text = "UNLICENSED" }
+license = { file = "LICENSE" }
 keywords = ["chatgpt","clean","cli","unicode","whitespace"]
 classifiers = [
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.12",
   "Environment :: Console",
   "Intended Audience :: Developers",
-  "License :: Other/Proprietary License"
+  "License :: OSI Approved :: MIT License"
 ]
 
 [project.urls]

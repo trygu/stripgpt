@@ -176,7 +176,7 @@ GitHub Actions workflow (`.github/workflows/ci.yml`) runs tests on Python 3.12.
 Use `--backup-suffix` during first runs for peace of mind.
 
 ## License
-Not yet specified (currently `UNLICENSED` in `pyproject.toml`). Add a LICENSE file before distribution.
+MIT License. See `LICENSE` file.
 
 ## Acknowledgements
 Inspired by persistent invisible marker annoyances in exported ChatGPT conversations.
